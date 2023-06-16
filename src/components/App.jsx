@@ -4,14 +4,21 @@ import { Section } from './Section';
 import { PhonebookForm } from './PhonebookForm';
 import { PhonebookContacts } from './PhonebookContacts';
 import { PhonebookFilter } from './PhonebookFilter';
+import { useDispatch, useSelector } from 'react-redux';
+import { setContact, setFilter } from 'redux/contactSlice';
+
 
 const App = () => {
-  const [contacts, setContacts] = useState(()=>JSON.parse(localStorage.getItem('contacts')) || [])
+  /* const [contacts, setContacts] = useState(()=>JSON.parse(localStorage.getItem('contacts')) || [])
   const [filter, setFilter] = useState('');
+   */
+  const dispatch = useDispatch()
+  const {contacts, filter} = useSelector(state =>(state))
 
-  useEffect(() => {
+
+/*   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  }, [contacts]); */
 
   const addNewContact = (sentContact) => {
     const isExist = contacts.find(
@@ -27,11 +34,13 @@ const App = () => {
       name: sentContact.name,
       number: sentContact.number,
     };
-    setContacts((prevContacts) => [...prevContacts, newContact]);
+
+    /* setContacts((prevContacts) => [...prevContacts, newContact]); */
+    dispatch(setContact([...contacts, newContact]))
   };
 
   const onFilterChange = (event) => {
-    setFilter(event.target.value);
+    dispatch(setFilter(event.target.value));
   };
 
   const getFilteredContacts = () => {
@@ -41,7 +50,8 @@ const App = () => {
   };
 
   const deleteContactById = (id) => {
-    setContacts((prevContacts) => prevContacts.filter((contact) => contact.id !== id));
+    /* setContacts((prevContacts) => prevContacts.filter((contact) => contact.id !== id)); */
+    dispatch(setContact(contacts.filter((contact) => contact.id !== id)))
   };
 
   return (
